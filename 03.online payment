@@ -1,0 +1,63 @@
+import java.util.Scanner;
+
+class BankAccount {
+    protected int accountNumber;
+    protected double balance;
+
+    BankAccount(int accountNumber, double balance) {
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+    }
+
+    double calculateFinalBalance() {
+        return balance;
+    }
+}
+
+class SavingsAccount extends BankAccount {
+    private double interestRate;
+
+    SavingsAccount(int accountNumber, double balance, double interestRate) {
+        super(accountNumber, balance);
+        this.interestRate = interestRate;
+    }
+
+    @Override
+    double calculateFinalBalance() {
+        return balance + (balance * interestRate / 100);
+    }
+}
+
+class CurrentAccount extends BankAccount {
+    private double overdraftLimit;
+
+    CurrentAccount(int accountNumber, double balance, double overdraftLimit) {
+        super(accountNumber, balance);
+        this.overdraftLimit = overdraftLimit;
+    }
+
+    @Override
+    double calculateFinalBalance() {
+        return balance + overdraftLimit;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int type = sc.nextInt();
+        int accNo = sc.nextInt();
+        double balance = sc.nextDouble();
+        double extra = sc.nextDouble();
+
+        BankAccount account; // runtime polymorphism
+        if (type == 1) {
+            account = new SavingsAccount(accNo, balance, extra);
+        } else {
+            account = new CurrentAccount(accNo, balance, extra);
+        }
+
+        System.out.printf("%.2f%n", account.calculateFinalBalance());
+        sc.close();
+    }
+}
